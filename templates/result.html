@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <style>
+        body {
+            background-image: url("static/background_img.jpeg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content {
+            background-color: rgba(255, 255, 255, 0.8); /* Adjust opacity as needed */
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h2>Uploaded Image</h2>
+        <img src="{{ url_for('static', filename=file_path) }}" alt="Uploaded Image" width="300">
+        <h2>Predicted Class:</h2>
+        <p>{{ predicted_class_label }}</p>
+		<p>{{ predicted_class_label_rf}}</p>
+    </div>
+	
+</body>
+</html>

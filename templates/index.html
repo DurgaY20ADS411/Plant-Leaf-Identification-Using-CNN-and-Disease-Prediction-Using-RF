@@ -1,0 +1,332 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaf Identification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            background-image: url("static/background3.jpeg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+			padding: 20px; /* Add padding to separate content from edges */
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            justify-content: center;
+            align-items: center;
+        }
+		
+		
+		
+    </style>
+</head>
+<body>
+	
+	    
+	
+    <div class="container" id="project">
+        <h1>Leaf Identification &amp; Disease Diagnosis</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" accept=".jpg, .jpeg, .png" required>
+            <button type="submit" class="button" width='150px'>Upload &amp; Identify</button>
+        </form>
+        <div id="output" class="preview"></div>
+		
+		
+    </div>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+            
+            // Check if a file is uploaded
+            if (!file) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            // Check if the uploaded file is not a leaf image
+            var fileExtension = file.name.split('.').pop().toLowerCase();
+            if (fileExtension !== 'jpg' && fileExtension !== 'jpeg') {
+                alert('Please upload a valid image file (JPEG or JPG).');
+                return;
+            }
+
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                var outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = '';
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                outputDiv.appendChild(img);
+
+                
+                var p2 = document.createElement('p');
+				var rfPredictionWords = data.predicted_class_rf.split('_');
+				p2.textContent = 'Plant Name: ' + rfPredictionWords[0];
+				outputDiv.appendChild(p2);
+				
+				var p = document.createElement('p');
+                p.textContent = data.predicted_class_cnn;
+                //outputDiv.appendChild(p); 
+				
+				// Show the Predict button
+            var predictButton = document.createElement('button');
+            predictButton.textContent = 'Predict Disease';
+            predictButton.classList.add('button');
+			predictButton.style.width = '150px';
+			
+            predictButton.addEventListener('click', function() {
+                outputDiv.appendChild(p);
+            });
+            outputDiv.appendChild(predictButton);
+				
+            })
+            .catch(error => console.error('Error:', error));
+        });
+		
+		
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaf Identification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<style>
+        body {
+            background-image: url("static/background3.jpeg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       
+    </style>
+	
+</head>
+<body>
+
+   
+	
+	<div class="container">
+        <h1>Disease prediction</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" accept=".jpg, .jpeg, .png" required>
+            <button type="submit" class="button">Upload &amp; Identify</button>
+        </form>
+        <div id="output" class="preview"></div>
+    </div>
+	<script>
+	document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+			
+			
+			// Check if a file is uploaded
+            if (!file) {
+                alert('Please select an image file.');
+                return;
+            }
+
+            // Check if the uploaded file is not a leaf image
+            var fileExtension = file.name.split('.').pop().toLowerCase();
+            if (fileExtension !== 'jpg' && fileExtension !== 'jpeg' ) {
+                alert('Please upload a valid image file (JPEG or JPG).');
+                return;
+            }
+			
+
+            fetch('/predict_cnn', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+			
+			
+                var outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = '';
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                outputDiv.appendChild(img);
+				
+				
+				var p = document.createElement('p');
+                p.textContent = 'Predicted Disease: ' + data.predicted_class;
+                outputDiv.appendChild(p);
+				
+				
+            })
+			
+			
+            .catch(error => console.error('Error:', error));
+        });
+	</script>
+	
+</body>
+</html>
+
+-->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaf Identification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<style>
+        body {
+            background-image: url("static/background3.jpeg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Leaf Identification &amp; Disease prediction</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="fileInput" name="file" accept=".jpg, .jpeg, .png" required>
+            <button type="submit" class="button">Upload &amp; Identify</button>
+        </form>
+        <div id="output" class="preview"></div>
+		<div id="output2" class="preview2"></div>
+    </div>
+    <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+
+        if (!file) {
+            alert('Please select an image file.');
+            return;
+        }
+
+        var fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'jpg' && fileExtension !== 'jpeg') {
+            alert('Please upload a valid image file (JPEG or JPG).');
+            return;
+        }
+		
+		fetch('/predict_rf', {
+			method: 'POST',
+			body: formData
+		})
+		.then(response => response.json())
+		.then(data => {
+			if (!data.predicted_class_rf) {
+				throw new Error('Prediction not received');
+				}
+			//console.log('Random Forest Prediction:', data.predicted_class_rf);
+			var outputDiv = document.getElementById('output');
+			outputDiv.innerHTML = '';
+			var img = document.createElement('img');
+			img.src = URL.createObjectURL(file);
+			outputDiv.appendChild(img);
+		
+			var p = document.createElement('p');
+			var rfPredictionWords = data.predicted_class_rf.split('_');
+			p.textContent = 'Predicted Plant (Random Forest): ' + rfPredictionWords[0];
+			//outputDiv.appendChild(p);
+			// Show the Predict button
+            var predictButton = document.createElement('button');
+            predictButton.textContent = 'Predict Plant:';
+            predictButton.classList.add('button');
+			predictButton.style.width = '150px';
+			
+            predictButton.addEventListener('click', function() {
+                outputDiv.appendChild(p);
+            });
+            outputDiv.appendChild(predictButton);
+				
+		})
+		.catch(error => {
+		console.error('Error:', error);
+    // Display error message to the user
+	});
+		
+
+
+        fetch('/predict_cnn', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            var outputDiv = document.getElementById('output2');
+            outputDiv.innerHTML = '';
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            //outputDiv.appendChild(img);
+			
+			
+            var p2 = document.createElement('p');
+            p2.textContent = 'Predicted Disease (CNN): ' + data.predicted_class_cnn;
+            //outputDiv.appendChild(p2);
+			// Show the Predict button
+            var predictButton = document.createElement('button');
+            predictButton.textContent = 'Predict Disease';
+            predictButton.classList.add('button');
+			predictButton.style.width = '150px';
+			
+            predictButton.addEventListener('click', function() {
+                outputDiv.appendChild(p2);
+            });
+            outputDiv.appendChild(predictButton);
+				
+        })
+        .catch(error => console.error('Error:', error));
+
+       
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Model Prediction</title>
+	
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+	<style>
+        body {
+            background-image: url("static/background3.jpeg");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       
+    </style>
+	
+	
+</head>
+<body>
+    <h1>Combined Model Prediction</h1>
+    
+    <form id="form-rf" action="/predict_rf" method="post" enctype="multipart/form-data">
+        <h2>Leaf Identification (Random Forest)</h2>
+        <input type="file" name="image_rf" accept="image/*">
+        <button type="submit">Predict RF</button>
+    </form>
+
+    <form id="form-cnn" action="/predict_cnn" method="post" enctype="multipart/form-data">
+        <h2>Disease Prediction (CNN)</h2>
+        <input type="file" name="image_cnn" accept="image/*">
+        <button type="submit">Predict CNN</button>
+    </form>
+
+    <div id="result-rf"></div>
+    <div id="result-cnn"></div>
+
+    <script>
+        // Function to handle RF prediction form submission
+        document.getElementById('form-rf').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(this);
+
+            // Send a POST request to the RF prediction endpoint
+            fetch('/predict_rf', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result-rf').innerHTML = '<h3>RF Prediction</h3><p>' + data.predicted_class_rf + '</p>';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Function to handle CNN prediction form submission
+        document.getElementById('form-cnn').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(this);
+
+            // Send a POST request to the CNN prediction endpoint
+            fetch('/predict_cnn', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result-cnn').innerHTML = '<h3>CNN Prediction</h3><p>' + data.predicted_class_cnn + '</p>';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
